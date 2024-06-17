@@ -4,14 +4,14 @@ public class Main {
     static final int PLAYER_COUNT = 4;
     static final int MAX_ROUNDS = 3;
     static final Scanner input = new Scanner(System.in);
+    static final Bank bank = new Bank();
 
-    static int round = 0;
+    static int round = 1;
     static GameState gameState = GameState.MENU;
     static Player[] players = new Player[PLAYER_COUNT];
     static int activePlayer = 0;
 
     public static void main(String[] args) {
-        initializePlayers();
         gameLoop();
     }
 
@@ -19,6 +19,11 @@ public class Main {
         for (int i = 0; i < PLAYER_COUNT; i++) {
             players[i] = new Player("Player " + (i + 1));
         }
+    }
+
+    private static void initializeBank() {
+        bank.initializeTickers();
+        bank.initializeCards();
     }
 
     private static void gameLoop() {
@@ -63,6 +68,10 @@ public class Main {
                 p.incrementVictoryPoints();
                 endTurn();
             }
+            case "PROD" -> {
+                bank.tickers.get("Wheat").changeLevel(1);
+                System.out.println("Price: " + bank.tickers.get("Wheat").getPrice());
+            }
             default -> {
                 System.out.println("Invalid Move");
                 playTurn();
@@ -83,6 +92,8 @@ public class Main {
     }
 
     private static void startGame() {
+        initializePlayers();
+        initializeBank();
         System.out.println("Let the games begin!");
     }
 
@@ -90,7 +101,7 @@ public class Main {
         activePlayer = (activePlayer + 1) % PLAYER_COUNT;
         if (activePlayer == 0)
             round++;
-        if (round == MAX_ROUNDS) {
+        if (round > MAX_ROUNDS) {
             gameState = GameState.END;
         }
     }
