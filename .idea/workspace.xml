@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="38ed4fbe-5f2e-424e-8913-5f0c8dba136d" name="Changes" comment="Seperated enums into new files. Added railroads. Made gameManager an instantiated object.">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Raccoon Tycoon.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Helper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ProductionCard.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TownCard.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/production_cards.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Bank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bank.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Railroad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RailroadCard.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2i1771kPZkrnCOFZaqsU79j0LbW" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="38ed4fbe-5f2e-424e-8913-5f0c8dba136d" name="Changes" comment="" />
+      <created>1718646059456</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1718646059456</updated>
+      <workItem from="1718646060486" duration="17346000" />
+      <workItem from="1718748865358" duration="4515000" />
+      <workItem from="1718895863933" duration="8537000" />
+    </task>
+    <task id="LOCAL-00001" summary="Created the game loop and the player class.&#10;&#10;The only supported player moves are VP to increment victory points and end to end the turn. &#10;&#10;The game ends when a max round number is reached.">
+      <option name="closed" value="true" />
+      <created>1718648120792</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1718648120792</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Added the resource price tickers managed by the bank class">
+      <option name="closed" value="true" />
+      <created>1718655116265</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1718655116265</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Seperated enums into new files. Added railroads. Made gameManager an instantiated object.">
+      <option name="closed" value="true" />
+      <created>1718665661629</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1718665661629</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Created the game loop and the player class.&#10;&#10;The only supported player moves are VP to increment victory points and end to end the turn. &#10;&#10;The game ends when a max round number is reached." />
+    <MESSAGE value="Added the resource price tickers managed by the bank class" />
+    <MESSAGE value="Seperated enums into new files. Added railroads. Made gameManager an instantiated object." />
+    <option name="LAST_COMMIT_MESSAGE" value="Seperated enums into new files. Added railroads. Made gameManager an instantiated object." />
+  </component>
+</project>

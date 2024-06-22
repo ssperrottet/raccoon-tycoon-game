@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class GameManager {
@@ -24,7 +26,13 @@ public class GameManager {
 
     private void initializePlayers() {
         for (int i = 0; i < PLAYER_COUNT; i++) {
-            players[i] = new Player("Player " + (i + 1));
+            Player p = new Player("Player " + (i + 1));
+
+            for (int j = 0; j < 3; j++) {
+                p.getProductionCards().add(bank.drawProductionCard());
+            }
+
+            players[i] = p;
         }
     }
 
@@ -37,7 +45,9 @@ public class GameManager {
         while (true) {
             switch (gameState) {
                 case MENU -> showMenu();
-                case ACTIVE -> playTurn();
+                case ACTIVE -> {
+                    playTurn();
+                }
                 case END -> {
                     endGame();
                     return;
@@ -63,17 +73,32 @@ public class GameManager {
 
     private void playTurn() {
         Player p = players[activePlayer];
-        System.out.printf("Round %d\nPlayer %s's Turn\n", round, p.getName());
-        handlePlayerMove(input.nextLine().trim());
+
+        displayBoard();
+        handlePlayerMove();
     }
 
-    private void handlePlayerMove(String playerMove) {
+    private void displayInventory(Player p) {
+        System.out.println("Money: $" + p.getMoney());
+        System.out.println("Resources: " + p.getResources());
+        System.out.println("Productions:");
+        displayProductionCards(p.getProductionCards());
+
+        System.out.println("Railroads:");
+        displayRailroadCards(p.getRailroadCards());
+
+        System.out.println("Towns:");
+        displayTownCards(p.getTownCards());
+    }
+
+    private void handlePlayerMove() {
         System.out.println("""
                 Available Moves:
                 PROD: Play a production card
                 SELL: Sell a resource
                 RAIL: Start an auction on a railroad
                 TOWN: Purchase a town card""");
+        String playerMove = input.nextLine().trim();
         Player p = players[activePlayer];
         switch (playerMove.toUpperCase()) {
             case "END" -> endTurn();
@@ -82,6 +107,10 @@ public class GameManager {
                 endTurn();
             }
             case "PROD" -> {
+                if (production(p)) {
+                    endTurn();
+                    return;
+                }
                 bank.tickers.get(Resources.WHEAT).changeLevel(1);
                 System.out.println("Price: " + bank.tickers.get(Resources.WHEAT).getPrice());
             }
@@ -99,6 +128,122 @@ public class GameManager {
                 System.out.println("Invalid Move");
                 playTurn();
             }
+        }
+    }
+
+    private boolean production(Player p) {
+        ArrayList<ProductionCard> cards = p.getProductionCards();
+        System.out.println("""
+                *Playing Production Card*
+
+                Available Cards:""");
+
+        displayProductionCards(cards);
+
+        System.out.print("Production Card Index: ");
+        try {
+            int choice = Integer.parseInt(input.nextLine());
+            ProductionCard card = cards.get(choice - 1);
+            playProductionCard(p, card);
+            return  true;
+        }
+        catch (Exception e) {
+            System.out.println("\nABORTING\n");
+            return false;
+        }
+    }
+
+    private void playProductionCard(Player p, ProductionCard card) {
+        HashMap<Resources, Integer> playerResources = p.getResources();
+        ArrayList<ProductionCard> playerProductions = p.getProductionCards();
+
+        ArrayList<Resources> price = card.getPriceResources();
+        ArrayList<Resources> production = card.getProductionResources();
+
+        for (Resources resource : price) {
+            bank.tickers.get(resource).changeLevel(1);
+        }
+
+        for (Resources resource : production) {
+            if (playerResources.size() == p.getResourceCap()) {
+                //TODO
+            }
+            int originalCount = playerResources.get(resource);
+            playerResources.put(resource, originalCount + 1);
+        }
+        playerProductions.remove(card);
+        playerProductions.add(bank.drawProductionCard());
+
+    }
+
+    private void displayBoard() {
+        System.out.printf("""
+                RACCOON TYCOON
+                
+                Resource Prices:
+                Wheat: $%d
+                Wood: $%d
+                Iron: $%d
+                Coal: $%d
+                Goods: $%d
+                Luxury: $%d
+                
+                Railroads (%d remaining)
+                %s
+                %s
+                
+                Towns: (%d remaining)
+                %s
+                
+                Buildings: (TODO remaining)
+                TODO
+                
+                """,
+
+                bank.tickers.get(Resources.WHEAT).getPrice(),
+                bank.tickers.get(Resources.WOOD).getPrice(),
+                bank.tickers.get(Resources.IRON).getPrice(),
+                bank.tickers.get(Resources.COAL).getPrice(),
+                bank.tickers.get(Resources.GOODS).getPrice(),
+                bank.tickers.get(Resources.LUXURY).getPrice(),
+
+                bank.railroadCards.size(),
+                bank.railroadSlot1,
+                bank.railroadSlot2,
+
+                bank.townCards.size(),
+                bank.townSlot
+                );
+        System.out.printf("(Round %d) Player %s's Turn:\n", round, players[activePlayer].getName());
+        displayInventory(players[activePlayer]);
+    }
+
+    private void displayProductionCards(ArrayList<ProductionCard> cards) {
+        int cardId = 1;
+        for (ProductionCard card : cards) {
+            System.out.print(cardId + ") ");
+            cardId++;
+            System.out.println(card);
+        }
+    }
+
+    private void displayTownCards(ArrayList<TownCard> cards) {
+        if (cards.isEmpty()) {
+            //System.out.println("No Towns");
+            return;
+        }
+        for (TownCard card : cards) {
+            System.out.println(card);
+        }
+    }
+
+    private void displayRailroadCards(ArrayList<RailroadCard> cards) {
+        if (cards.isEmpty()) {
+            //System.out.println("No Railroads");
+            return;
+        }
+        for (RailroadCard card : cards) {
+            System.out.println(card);
         }
     }
 
@@ -126,27 +271,30 @@ public class GameManager {
         };
     }
 
-    private void showMenu() {
+    void showMenu() {
         System.out.println("RACCOON TYCOON");
         while (true) {
             System.out.println("Type START to start the game: ");
             if (input.nextLine().trim().equalsIgnoreCase("START")) {
-                startGame();
                 gameState = GameState.ACTIVE;
+                startGame();
                 break;
             }
         }
     }
 
     void startGame() {
-        initializePlayers();
+
         initializeBank();
+        initializePlayers();
         System.out.println("Let the games begin!");
         gameLoop();
     }
 
     private void endTurn() {
-        System.out.println("Turn over");
+        displayBoard();
+        System.out.println("Turn over\nPRESS ENTER TO CONTINUE");
+        input.nextLine();
         activePlayer = (activePlayer + 1) % PLAYER_COUNT;
         if (activePlayer == 0)
             round++;

@@ -14,7 +14,7 @@ public class Main {
         GameManager gameManager = new GameManager(playerCount, maxRounds, scanner, bank);
 
         // Start the game
-        gameManager.startGame();
+        gameManager.showMenu();
 
         // Close scanner at the end of the game
         scanner.close();

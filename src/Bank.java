@@ -1,11 +1,22 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class Bank {
     private static final int TICKER_LEVELS = 12;
-    private static final int TOWNS = 20;
 
-    public List<Railroad> railroads = new ArrayList<>();
-    public Map<Resources, ResourceTicker> tickers = new HashMap<>();
+    public HashMap<Resources, ResourceTicker> tickers = new HashMap<>();
+
+    public List<RailroadCard> railroadCards = new ArrayList<>();
+    public RailroadCard railroadSlot1;
+    public RailroadCard railroadSlot2;
+
+    public List<TownCard> townCards = new ArrayList<>();
+    public TownCard townSlot;
+
+    public List<ProductionCard> productionCards = new ArrayList<ProductionCard>();
+
 
     public void initializeTickers() {
         tickers.put(Resources.WHEAT, new ResourceTicker(1, TICKER_LEVELS));
@@ -16,19 +27,94 @@ public class Bank {
         tickers.put(Resources.LUXURY, new ResourceTicker(3, TICKER_LEVELS));
     }
 
-    public void initializeCards(int playerCount) {
+    private void loadRailroadCards(int playerCount) {
         for (int i = 0; i < 4; i++) {
-            railroads.add(new Railroad(Railroad.types.BEAR));
-            railroads.add(new Railroad(Railroad.types.DOG));
-            railroads.add(new Railroad(Railroad.types.CAT));
+            railroadCards.add(new RailroadCard(RailroadCard.types.BEAR));
+            railroadCards.add(new RailroadCard(RailroadCard.types.DOG));
+            railroadCards.add(new RailroadCard(RailroadCard.types.CAT));
             if (playerCount > 2)
-                railroads.add(new Railroad(Railroad.types.FOX));
+                railroadCards.add(new RailroadCard(RailroadCard.types.FOX));
             if (playerCount > 3)
-                railroads.add(new Railroad(Railroad.types.RACCOON));
+                railroadCards.add(new RailroadCard(RailroadCard.types.RACCOON));
             if (playerCount > 4)
-                railroads.add(new Railroad(Railroad.types.SKUNK));
+                railroadCards.add(new RailroadCard(RailroadCard.types.SKUNK));
         }
-        Collections.shuffle(railroads);
+    }
+    private void loadProductionCards() {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/production_cards.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if (parts.length == 2) {
+                    ArrayList<Resources> productionResources = parseResources(parts[0]);
+                    ArrayList<Resources> priceResources = parseResources(parts[1]);
+                    ProductionCard card = new ProductionCard(productionResources, priceResources);
+                    productionCards.add(card);
+                } else {
+                    System.err.println("Invalid card format: " + line);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+        }
+    }
+
+    public TownCard drawTownCard() {
+        return townCards.remove(townCards.size() - 1);
+    }
+
+    public ProductionCard drawProductionCard() {
+        return productionCards.remove(productionCards.size() - 1);
+    }
+
+    public RailroadCard drawRailroadCard() {
+        return railroadCards.remove(railroadCards.size() - 1);
+    }
+
+    private void loadTownCards() {
+
+        for (int i = 3; i >= 0; i--) {
+            ArrayList<Resources> townCardResources = new ArrayList<>();
+            townCardResources.add(Resources.IRON);
+            townCardResources.add(Resources.COAL);
+            townCardResources.add(Resources.GOODS);
+            townCardResources.add(Resources.LUXURY);
+
+            Collections.shuffle(townCardResources);
+
+            townCards.add(new TownCard(i + 2, townCardResources.get(0)));
+            townCards.add(new TownCard(i + 2, townCardResources.get(1)));
+            townCards.add(new TownCard(i + 2, townCardResources.get(2)));
+            townCards.add(new TownCard(i + 2, townCardResources.get(3)));
+        }
+    }
+
+    private ArrayList<Resources> parseResources(String resourcesPart) {
+        String[] resourceStrings = resourcesPart.split(",");
+        ArrayList<Resources> resources = new ArrayList<>();
+        for (String resourceString : resourceStrings) {
+            try {
+                Resources resource = Resources.valueOf(resourceString.trim().toUpperCase());
+                resources.add(resource);
+            } catch (IllegalArgumentException e) {
+                System.err.println("Invalid resource: " + resourceString.trim());
+            }
+        }
+        return resources;
+    }
+
+    public void initializeCards(int playerCount) {
+        loadProductionCards();
+        Collections.shuffle(productionCards);
+
+        loadRailroadCards(playerCount);
+        Collections.shuffle(railroadCards);
+
+        loadTownCards();
+
+        railroadSlot1 = drawRailroadCard();
+        railroadSlot2 = drawRailroadCard();
+        townSlot = drawTownCard();
     }
 
     public Map<Resources, ResourceTicker> getTickers() {

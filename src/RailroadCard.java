@@ -1,9 +1,9 @@
 import java.util.HashMap;
 
-public class Railroad {
+public class RailroadCard {
     public types type;
 
-    public Railroad(types type) {
+    public RailroadCard(types type) {
         this.type = type;
     }
 
@@ -26,5 +26,9 @@ public class Railroad {
     // Method to retrieve the values associated with a type
     public static int[] getValuesForType(types type) {
         return values.get(type);
+    }
+
+    public String toString() {
+        return "Railroad{" + type + ", " + Helper.stringifyArray(getValuesForType(type)) + "}";
     }
 }
