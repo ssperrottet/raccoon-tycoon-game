@@ -20,7 +20,7 @@ public class ProductionCard {
     @Override
     public String toString() {
         return "ProductionCard{" +
-                "prod=" + Helper.stringifyArray(productionResources) +
+                "productionResources=" + Helper.stringifyArray(productionResources) +
                 ", priceResources=" + Helper.stringifyArray(priceResources) +
                 '}';
     }

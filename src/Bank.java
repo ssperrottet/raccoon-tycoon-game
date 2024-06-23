@@ -29,15 +29,15 @@ public class Bank {
 
     private void loadRailroadCards(int playerCount) {
         for (int i = 0; i < 4; i++) {
-            railroadCards.add(new RailroadCard(RailroadCard.types.BEAR));
-            railroadCards.add(new RailroadCard(RailroadCard.types.DOG));
-            railroadCards.add(new RailroadCard(RailroadCard.types.CAT));
+            railroadCards.add(new RailroadCard(RailroadCard.Types.BEAR));
+            railroadCards.add(new RailroadCard(RailroadCard.Types.DOG));
+            railroadCards.add(new RailroadCard(RailroadCard.Types.CAT));
             if (playerCount > 2)
-                railroadCards.add(new RailroadCard(RailroadCard.types.FOX));
+                railroadCards.add(new RailroadCard(RailroadCard.Types.FOX));
             if (playerCount > 3)
-                railroadCards.add(new RailroadCard(RailroadCard.types.RACCOON));
+                railroadCards.add(new RailroadCard(RailroadCard.Types.RACCOON));
             if (playerCount > 4)
-                railroadCards.add(new RailroadCard(RailroadCard.types.SKUNK));
+                railroadCards.add(new RailroadCard(RailroadCard.Types.SKUNK));
         }
     }
     private void loadProductionCards() {

@@ -1,34 +1,41 @@
 import java.util.HashMap;
 
 public class RailroadCard {
-    public types type;
-
-    public RailroadCard(types type) {
-        this.type = type;
-    }
-
-    public enum types {
+    public enum Types {
         FOX, SKUNK, BEAR, CAT, RACCOON, DOG
     }
 
-    static HashMap<types, int[]> values = new HashMap<>();
+    private final Types type;
+
+    // Example values associated with each type
+    private static final HashMap<Types, int[]> values = new HashMap<>();
 
     static {
-        // Initialize the HashMap with some example values
-        values.put(types.FOX, new int[]{1, 2, 3});
-        values.put(types.SKUNK, new int[]{4, 5, 6});
-        values.put(types.BEAR, new int[]{7, 8, 9});
-        values.put(types.CAT, new int[]{10, 11, 12});
-        values.put(types.RACCOON, new int[]{13, 14, 15});
-        values.put(types.DOG, new int[]{16, 17, 18});
+        values.put(Types.FOX, new int[]{1, 2, 3});
+        values.put(Types.SKUNK, new int[]{4, 5, 6});
+        values.put(Types.BEAR, new int[]{7, 8, 9});
+        values.put(Types.CAT, new int[]{10, 11, 12});
+        values.put(Types.RACCOON, new int[]{13, 14, 15});
+        values.put(Types.DOG, new int[]{16, 17, 18});
     }
 
-    // Method to retrieve the values associated with a type
-    public static int[] getValuesForType(types type) {
+    public RailroadCard(Types type) {
+        this.type = type;
+    }
+
+    public Types getType() {
+        return type;
+    }
+
+    public int[] getValues() {
         return values.get(type);
     }
 
+    @Override
     public String toString() {
-        return "Railroad{" + type + ", " + Helper.stringifyArray(getValuesForType(type)) + "}";
+        return "RailroadCard{" +
+                "type=" + type +
+                ", values=" + Helper.stringifyArray(getValues()) +
+                '}';
     }
 }
