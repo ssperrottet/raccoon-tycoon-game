@@ -4,23 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38ed4fbe-5f2e-424e-8913-5f0c8dba136d" name="Changes" comment="Seperated enums into new files. Added railroads. Made gameManager an instantiated object.">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Raccoon Tycoon.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Helper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ProductionCard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/TownCard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/production_cards.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bank.java" afterDir="false" />
+    <list default="true" id="38ed4fbe-5f2e-424e-8913-5f0c8dba136d" name="Changes" comment="Expanded game mechanics. Introduced basic player turns and user interface.">
+      <change afterPath="$PROJECT_DIR$/src/TerminalUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Railroad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RailroadCard.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +57,20 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="Raccoon Tycoon" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -80,6 +82,8 @@
       <workItem from="1718646060486" duration="17346000" />
       <workItem from="1718748865358" duration="4515000" />
       <workItem from="1718895863933" duration="8537000" />
+      <workItem from="1719098283033" duration="2141000" />
+      <workItem from="1719147736852" duration="4898000" />
     </task>
     <task id="LOCAL-00001" summary="Created the game loop and the player class.&#10;&#10;The only supported player moves are VP to increment victory points and end to end the turn. &#10;&#10;The game ends when a max round number is reached.">
       <option name="closed" value="true" />
@@ -105,7 +109,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718665661629</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Expanded game mechanics. Introduced basic player turns and user interface.">
+      <option name="closed" value="true" />
+      <created>1719098390926</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1719098390926</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -115,6 +127,7 @@
     <MESSAGE value="Created the game loop and the player class.&#10;&#10;The only supported player moves are VP to increment victory points and end to end the turn. &#10;&#10;The game ends when a max round number is reached." />
     <MESSAGE value="Added the resource price tickers managed by the bank class" />
     <MESSAGE value="Seperated enums into new files. Added railroads. Made gameManager an instantiated object." />
-    <option name="LAST_COMMIT_MESSAGE" value="Seperated enums into new files. Added railroads. Made gameManager an instantiated object." />
+    <MESSAGE value="Expanded game mechanics. Introduced basic player turns and user interface." />
+    <option name="LAST_COMMIT_MESSAGE" value="Expanded game mechanics. Introduced basic player turns and user interface." />
   </component>
 </project>
