@@ -5,7 +5,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Bank bank = new Bank();
         GameUI ui = new GameUI(scanner);
-        GameManager gameManager = new GameManager(4, 3, ui, bank);
+        GameManager gameManager = new GameManager(ui, bank);
 
         gameManager.startGame();
         scanner.close();

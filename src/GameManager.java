@@ -1,25 +1,23 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameManager {
-    private final int PLAYER_COUNT;
-    private final int MAX_ROUNDS;
+    private int PLAYER_COUNT;
     private final GameUI ui;
     private final Bank bank;
 
     private int round;
     private GameState gameState;
-    private final Player[] players;
+    private Player[] players;
     private int activePlayer;
 
-    public GameManager(int playerCount, int maxRounds, GameUI ui, Bank bank) {
-        this.PLAYER_COUNT = playerCount;
-        this.MAX_ROUNDS = maxRounds;
+    public GameManager(GameUI ui, Bank bank) {
         this.ui = ui;
         this.bank = bank;
         this.round = 1;
         this.gameState = GameState.MENU;
-        this.players = new Player[PLAYER_COUNT];
         this.activePlayer = 0;
     }
 
@@ -52,6 +50,9 @@ public class GameManager {
         ui.displayMessage("RACCOON TYCOON");
         while (true) {
             if (ui.getUserInput("Type START to start the game: ").equalsIgnoreCase("START")) {
+                PLAYER_COUNT = Integer.parseInt(ui.getUserInput("Player Count: "));
+                players = new Player[PLAYER_COUNT];
+
                 gameState = GameState.ACTIVE;
                 initializeBank();
                 initializePlayers();
@@ -102,11 +103,11 @@ public class GameManager {
 
         switch (choice) {
             case 1 -> {
-                if (playProduction(p))
+                if (playProduction())
                     turnConcluded = true;
             }
             case 2 -> {
-                if (sellResource(p))
+                if (sellResource())
                     turnConcluded = true;
             }
             case 3 -> {
@@ -116,8 +117,8 @@ public class GameManager {
             }
             case 4 -> {
                 // Implement purchasing town card (if applicable)
-                ui.awaitInput("Town card functionality not implemented yet.");
-                playTurn(); // Go back to playTurn() if not implemented
+                if (purchaseTown())
+                    turnConcluded = true;
             }
             default -> {
                 ui.awaitInput("Invalid choice. Please select a number from 1 to 4.");
@@ -128,7 +129,117 @@ public class GameManager {
             endTurn();
     }
 
-    private boolean playProduction(Player p) {
+    private boolean purchaseTown() {
+        Player p = players[activePlayer];
+        TownCard card = bank.townSlot;
+        boolean canPayMain = p.getResources().getOrDefault(card.getType(), 0) >= card.getPrice();
+        boolean canPayAlt = countResources(p) >= card.getAltPrice();
+
+        if (!canPayMain && !canPayAlt) {
+            ui.awaitInput("Cannot afford town card.");
+            playTurn();
+            return false;
+        }
+
+        ui.clearConsole();
+        ui.displayMessage("*Purchasing Town Card*\n\n" + card + "\n");
+        ui.displayMessage("Resources: " + ui.formatResources(p.getResources()) + "\n");
+
+        String priceInfo;
+        if (canPayMain && !canPayAlt) {
+            priceInfo = card.getPrice() + " " + card.getType();
+        } else if (!canPayMain) {
+            priceInfo = card.getAltPrice() + " of any resource";
+        } else {
+            String choice = ui.getUserInput("Do you want to pay the main price (" + card.getPrice() + " " + card.getType() + ") or the alternative price (" + card.getAltPrice() + " of any resource)? (1 for main, 2 for alternative): ").trim();
+            if (choice.equals("1")) {
+                priceInfo = card.getPrice() + " " + card.getType();
+            } else if (choice.equals("2")) {
+                priceInfo = card.getAltPrice() + " of any resource";
+            } else {
+                ui.awaitInput("Invalid choice. Purchase canceled.");
+                playTurn();
+                return false;
+            }
+        }
+
+        if (!ui.getUserInput("Confirm Purchase of Town Card for " + priceInfo + "? (y/n) ").trim().equalsIgnoreCase("y")) {
+            playTurn();
+            return false;
+        }
+
+        if (priceInfo.equals(card.getPrice() + " " + card.getType())) {
+            p.getResources().put(card.getType(), p.getResources().get(card.getType()) - card.getPrice());
+        } else {
+            discardResources(p, card.getAltPrice());
+        }
+
+        p.getTownCards().add(card);
+        bank.townSlot = bank.drawTownCard();
+        return true;
+    }
+
+
+    private int countResources(Player p) {
+        return p.getResources().values().stream().mapToInt(Integer::intValue).sum();
+    }
+
+    private void discardResources(Player p, int amount) {
+        HashMap<Resources, Integer> resources = p.getResources();
+        int remaining = amount;
+
+        if (countResources(p) == amount) {
+            p.getResources().clear();
+            ui.awaitInput("All resources have been discarded.");
+            return;
+        }
+
+        HashMap<Resources, Integer> discardedResources = new HashMap<>();
+
+        while (remaining > 0) {
+            ui.clearConsole();
+            ui.displayMessage("You need to discard " + remaining + " resources.");
+            ui.displayMessage("Resources: " + ui.formatResources(resources));
+
+            Resources resource = ui.selectResource(resources);
+            if (resource == null) {
+                ui.displayMessage("Invalid selection. Please choose a resource to discard.");
+                continue; //add ability to cancel transaction maybe
+            }
+
+            int currentAmount = resources.get(resource);
+            int discardAmount = 1;
+
+            try {
+                if (currentAmount > 1 && remaining > 1)
+                    discardAmount = Integer.parseInt(ui.getUserInput("Enter amount to discard (1 to " + Math.min(currentAmount, remaining) + "): ").trim());
+            } catch (NumberFormatException e) {
+                ui.awaitInput("Invalid input. Please enter a valid number.");
+                continue;
+            }
+            if (discardAmount < 1 || discardAmount > Math.min(currentAmount, remaining)) {
+                ui.awaitInput("Invalid amount. Please enter a number between 1 and " + Math.min(currentAmount, remaining) + ".");
+                continue;
+            }
+
+            resources.put(resource, currentAmount - discardAmount);
+            remaining -= discardAmount;
+
+            // Aggregate discarded resources of the same type
+            discardedResources.put(resource, discardedResources.getOrDefault(resource, 0) + discardAmount);
+        }
+
+        // Prepare formatted output of discarded resources
+        List<String> output = new ArrayList<>();
+        for (Map.Entry<Resources, Integer> entry : discardedResources.entrySet()) {
+            output.add(entry.getValue() + " " + entry.getKey().name());
+        }
+        ui.clearConsole();
+        ui.awaitInput("Discarded " + String.join(", ", output));
+    }
+
+    private boolean playProduction() {
+        Player p = players[activePlayer];
         ArrayList<ProductionCard> cards = p.getProductionCards();
         ProductionCard card = ui.selectProductionCard(cards);
         if (card == null) {
@@ -160,7 +271,8 @@ public class GameManager {
         ui.awaitInput("PRESS ENTER TO CONTINUE");
     }
 
-    private boolean sellResource(Player p) {
+    private boolean sellResource() {
+        Player p = players[activePlayer];
         // Check if the player has any resources to sell
         if (p.getResources().values().stream().allMatch(count -> count == 0)) {
             ui.awaitInput("No Resources To Sell. Aborting Sell");
@@ -184,13 +296,13 @@ public class GameManager {
                 quantity = Integer.parseInt(ui.getUserInput("Quantity: ").trim());
         } catch (NumberFormatException e) {
             ui.awaitInput("Invalid quantity. Please enter a number.");
-            return sellResource(p); // Retry selling with valid input
+            return sellResource(); // Retry selling with valid input
         }
 
         // Validate quantity against player's inventory
         if (quantity > currentQuantity) {
             ui.awaitInput("Insufficient " + resource + " to sell.");
-            return sellResource(p); // Retry selling with valid quantity
+            return sellResource(); // Retry selling with valid quantity
         }
 
         // Calculate total earnings and update player's resources and money
@@ -208,10 +320,10 @@ public class GameManager {
         ui.updateDisplay(bank, players[activePlayer], round);
         ui.awaitInput("TURN OVER\nPRESS ENTER TO CONTINUE");
         activePlayer = (activePlayer + 1) % PLAYER_COUNT;
-        if (activePlayer == 0)
+        if (activePlayer == 0) {
             round++;
-        if (round > MAX_ROUNDS) {
-            gameState = GameState.END;
+            if (bank.townCards.isEmpty() || bank.railroadCards.isEmpty())
+                gameState = GameState.END;
         }
     }
 }
